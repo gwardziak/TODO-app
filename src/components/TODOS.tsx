@@ -1,15 +1,16 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState, useRef } from "react";
 import { TODO } from "./TODO";
 import { v4 as uuid } from "uuid";
 
 type TODOSType = {
   id: string;
-  value: string;
+  value: string | undefined;
 }[];
 
 export const TODOS: FunctionComponent = () => {
   const [items, manageItems] = useState<TODOSType>([]);
-
+  const inputRef = useRef<HTMLInputElement>(null);
+  /*
   const addTODO = (): void => {
     manageItems([
       ...items,
@@ -19,7 +20,22 @@ export const TODOS: FunctionComponent = () => {
       },
     ]);
   };
+*/
 
+  const addTODO = (event: React.MouseEvent<HTMLButtonElement>): void => {
+    manageItems([
+      ...items,
+      {
+        id: uuid(),
+        value: inputRef.current?.value,
+      },
+    ]);
+    // console.log(inputRef);
+    //inputRef.current?.reset();
+    //event.target.reset();
+    // refs.inputRef.value = "";
+    event.preventDefault();
+  };
   const remvoveTODO = (id: string): void => {
     const index = items.findIndex((todo) => todo.id === id);
 
@@ -30,7 +46,8 @@ export const TODOS: FunctionComponent = () => {
 
   return (
     <>
-      <button onClick={addTODO}>Add a number</button>
+      <input ref={inputRef} type="text" />
+      <button onClick={addTODO}>Add a TODO</button>
 
       <ul>
         {items.map((item) => (
