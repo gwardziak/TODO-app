@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState, Component } from "react";
 import logo from "./logo.svg";
-import { TODOS } from "./components/TODOS";
+import { TODOS } from "./components/Todos";
 import "./App.css";
 
 function App() {

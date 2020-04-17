@@ -1,57 +1,52 @@
 import React, { FunctionComponent, useState, useRef } from "react";
-import { TODO } from "./TODO";
+import { Todo } from "./Todo";
 import { v4 as uuid } from "uuid";
 
-type TODOSType = {
+type TodosType = {
   id: string;
-  value: string | undefined;
+  value: string;
 }[];
 
 export const TODOS: FunctionComponent = () => {
-  const [items, manageItems] = useState<TODOSType>([]);
-  const inputRef = useRef<HTMLInputElement>(null);
-  /*
-  const addTODO = (): void => {
-    manageItems([
-      ...items,
-      {
-        id: uuid(),
-        value: Math.random() * 100 + "1", //val input
-      },
-    ]);
-  };
-*/
+  const [items, setItems] = useState<TodosType>([]);
+  const [todo, setTodo] = useState<string>("");
 
-  const addTODO = (event: React.MouseEvent<HTMLButtonElement>): void => {
-    manageItems([
+  const addTODO = (evt: React.FormEvent<HTMLFormElement>): void => {
+    evt.preventDefault();
+
+    setItems([
       ...items,
       {
         id: uuid(),
-        value: inputRef.current?.value,
+        value: todo,
       },
     ]);
-    // console.log(inputRef);
-    //inputRef.current?.reset();
-    //event.target.reset();
-    // refs.inputRef.value = "";
-    event.preventDefault();
+
+    setTodo("");
   };
+
   const remvoveTODO = (id: string): void => {
     const index = items.findIndex((todo) => todo.id === id);
 
-    manageItems(
+    setItems(
       items.slice(0, index).concat(items.slice(index + 1, items.length))
     );
   };
 
   return (
     <>
-      <input ref={inputRef} type="text" />
-      <button onClick={addTODO}>Add a TODO</button>
-
+      <form onSubmit={addTODO}>
+        <input
+          type="text"
+          onChange={(e) => setTodo(e.target.value)}
+          value={todo}
+        />
+        <br />
+        <input type="submit" value="Add Todo" />
+      </form>
       <ul>
         {items.map((item) => (
-          <TODO id={item.id} value={item.value} removeTodo={remvoveTODO} />
+          <Todo id={item.id} value={item.value} removeTodo={remvoveTODO} />
         ))}
       </ul>
     </>
