@@ -1,16 +1,32 @@
 import React, { FunctionComponent, useState } from "react";
 
-type Props = {
+export type TodoType = {
   id: string;
-  value: string;
+  text: string;
+  complete: boolean;
+  edit: boolean;
   removeTodo: (id: string) => void;
-  editTodo?: (id: string) => void;
+  editTodo: (id: string) => void;
+  completeTodo: (id: string) => void;
 };
 
-export const Todo: FunctionComponent<Props> = ({ id, value, removeTodo }) => {
+export const Todo: FunctionComponent<TodoType> = (props) => {
+  const {
+    id,
+    text,
+    complete,
+    edit,
+    removeTodo,
+    editTodo,
+    completeTodo,
+  } = props;
   return (
     <>
-      <li onClick={() => removeTodo(id)}>{value}</li>
+      <li key={id}>
+        <span onClick={() => completeTodo(id)}>{text}</span>{" "}
+        <button onClick={() => removeTodo(id)}>x</button>
+        <div>{complete ? "Complete" : "Incomplete"}</div>
+      </li>
     </>
   );
 };

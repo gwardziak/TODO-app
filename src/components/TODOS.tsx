@@ -4,49 +4,78 @@ import { v4 as uuid } from "uuid";
 
 type TodosType = {
   id: string;
-  value: string;
+  text: string;
+  complete: boolean;
+  edit: boolean;
 }[];
 
 export const TODOS: FunctionComponent = () => {
-  const [items, setItems] = useState<TodosType>([]);
-  const [todo, setTodo] = useState<string>("");
+  const [todos, setTodos] = useState<TodosType>([]);
+  const [value, setValue] = useState<string>("");
 
-  const addTODO = (evt: React.FormEvent<HTMLFormElement>): void => {
-    evt.preventDefault();
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    addTODO(value);
 
-    setItems([
-      ...items,
+    e.preventDefault();
+    setValue("");
+  };
+
+  const addTODO = (text: string): void => {
+    setTodos([
+      ...todos,
       {
         id: uuid(),
-        value: todo,
+        text,
+        complete: false,
+        edit: false,
       },
     ]);
+  };
 
-    setTodo("");
+  const editTodo = (id: string): void => {
+    const index = todos.findIndex((todo) => todo.id === id);
+    const newTodos: TodosType = [...todos];
+    newTodos[index].text = "new";
+
+    setTodos(newTodos);
   };
 
   const remvoveTODO = (id: string): void => {
-    const index = items.findIndex((todo) => todo.id === id);
+    const index = todos.findIndex((todo) => todo.id === id);
 
-    setItems(
-      items.slice(0, index).concat(items.slice(index + 1, items.length))
+    setTodos(
+      todos.slice(0, index).concat(todos.slice(index + 1, todos.length))
     );
+  };
+
+  const completeTodo = (id: string): void => {
+    const index = todos.findIndex((todo) => todo.id === id);
+    const newTodos: TodosType = [...todos];
+    newTodos[index].complete = !newTodos[index].complete;
+
+    setTodos(newTodos);
   };
 
   return (
     <>
-      <form onSubmit={addTODO}>
+      <h1>Todo List</h1>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
-          onChange={(e) => setTodo(e.target.value)}
-          value={todo}
+          onChange={(e) => setValue(e.target.value)}
+          value={value}
         />
         <br />
-        <input type="submit" value="Add Todo" />
+        <input type="submit" value="Add Todo" required />
       </form>
       <ul>
-        {items.map((item) => (
-          <Todo id={item.id} value={item.value} removeTodo={remvoveTODO} />
+        {todos.map((todo) => (
+          <Todo
+            {...todo}
+            removeTodo={remvoveTODO}
+            editTodo={editTodo}
+            completeTodo={completeTodo}
+          />
         ))}
       </ul>
     </>
