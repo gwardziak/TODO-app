@@ -2,6 +2,7 @@ import React, { FunctionComponent, useState, useEffect } from "react";
 import { Todo } from "./Todo";
 import { v4 as uuid } from "uuid";
 import useFetch from "use-http";
+import "../todo.css";
 
 type TodoOptions = {
   id: number;
@@ -71,24 +72,62 @@ export const Todos: FunctionComponent = () => {
   return (
     <>
       <h1>Todo List</h1>
+
       <form onSubmit={handleSubmit}>
+        <label htmlFor="new-task">Add Item</label>
         <input
           type="text"
           onChange={(e) => setValue(e.target.value)}
           value={value}
+          id="new-task"
         />
-        <br />
-        <input type="submit" value="Add Todo" required />
+        <input type="submit" value="Add" required />
       </form>
-      <ul>
-        {todos.map((todo) => (
-          <Todo
-            {...todo}
-            removeTodo={remvoveTodo}
-            completeTodo={completeTodo}
-          />
-        ))}
+
+      <h3>Todo</h3>
+      <ul id="incomplete-tasks">
+        {todos
+          .filter((todo) => todo.complete === false)
+          .map((filteredTodo) => (
+            <Todo
+              {...filteredTodo}
+              removeTodo={remvoveTodo}
+              completeTodo={completeTodo}
+            />
+          ))}
+      </ul>
+
+      <h3>Completed</h3>
+      <ul id="completed-tasks">
+        {todos
+          .filter((todo) => todo.complete === true)
+          .map((filteredTodo) => (
+            <Todo
+              {...filteredTodo}
+              removeTodo={remvoveTodo}
+              completeTodo={completeTodo}
+            />
+          ))}
       </ul>
     </>
   );
 };
+
+/*
+
+
+
+
+
+
+
+
+        <li className="editMode">
+          <input type="checkbox" />
+          <label>Go Shopping</label>
+          <input type="text" value="Go Shopping" />
+          <button className="edit">Edit</button>
+          <button className="delete">Delete</button>
+        </li>
+
+*/

@@ -13,11 +13,44 @@ export const Todo: FunctionComponent<TodoType> = (props) => {
 
   return (
     <>
-      <li key={id}>
-        <span onClick={() => completeTodo(id)}>{text}</span>{" "}
-        <button onClick={() => removeTodo(id)}>x</button>
-        <div>{complete ? "Complete" : "Incomplete"}</div>
-      </li>
+      {complete && (
+        <li>
+          <input type="checkbox" checked onClick={() => completeTodo(id)} />
+          <label>{text}</label>
+          <input type="text" />
+          <button className="edit">Edit</button>
+          <button className="delete" onClick={() => removeTodo(id)}>
+            Delete
+          </button>
+        </li>
+      )}
+
+      {!complete && (
+        <li>
+          <input type="checkbox" onClick={() => completeTodo(id)} />
+          <label>{text}</label>
+          <input type="text" />
+          <button className="edit">Edit</button>
+          <button className="delete" onClick={() => removeTodo(id)}>
+            Delete
+          </button>
+        </li>
+      )}
     </>
   );
 };
+
+/*
+
+*/
+//
+/*
+        <li className="editMode">
+          <input type="checkbox" />
+          <label>Go Shopping</label>
+          <input type="text" value="Go Shopping" />
+          <button className="edit">Edit</button>
+          <button className="delete">Delete</button>
+        </li>
+
+*/
