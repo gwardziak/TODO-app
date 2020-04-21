@@ -3,18 +3,16 @@ import { Todo } from "./Todo";
 import { v4 as uuid } from "uuid";
 import useFetch from "use-http";
 
-type TodosType = {
-  id: string;
+type TodoOptions = {
+  id: number;
   text: string;
   complete: boolean;
-  edit: boolean;
-}[];
+};
 
-export const TODOS: FunctionComponent = () => {
-  const [todos, setTodos] = useState<TodosType>([]);
+export const Todos: FunctionComponent = () => {
+  const [todos, setTodos] = useState<TodoOptions[]>([]);
   const [value, setValue] = useState<string>("");
-  //
-  const [request, response] = useFetch("http://localhost:5000/todos");
+  const [request, response] = useFetch("http://localhost:5000");
 
   // componentDidMount
   useEffect(() => {
@@ -22,50 +20,49 @@ export const TODOS: FunctionComponent = () => {
   }, []);
 
   async function initializeTodos() {
-    const initialTodos = await request.get("/");
-
+    const initialTodos = await request.get("/todos");
     if (response.ok) setTodos(initialTodos);
   }
-  //
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
-    addTODO(value);
+    addTodo(value);
 
     e.preventDefault();
     setValue("");
   };
 
-  const addTODO = (text: string): void => {
-    setTodos([
-      ...todos,
-      {
-        id: uuid(),
-        text,
-        complete: false,
-        edit: false,
-      },
-    ]);
-    console.log(todos);
+  const addTodo = async (text: string) => {
+    const newTodo = await request.post("/todos", {
+      text,
+      complete: false,
+    });
+
+    if (response.ok) setTodos([...todos, newTodo]);
   };
 
-  const editTodo = (id: string): void => {
+  /*
+  const editTodo = (id: number): void => {
     const index = todos.findIndex((todo) => todo.id === id);
     const newTodos: TodosType = [...todos];
     newTodos[index].text = "new";
 
     setTodos(newTodos);
   };
+*/
+  const remvoveTodo = async (id: number) => {
+    const newTodo = await request.delete(`/todos/${id}`);
 
-  const remvoveTODO = (id: string): void => {
-    const index = todos.findIndex((todo) => todo.id === id);
-
-    setTodos(
-      todos.slice(0, index).concat(todos.slice(index + 1, todos.length))
-    );
+    if (response.ok) {
+      const index = todos.findIndex((todo) => todo.id === id);
+      setTodos(
+        todos.slice(0, index).concat(todos.slice(index + 1, todos.length))
+      );
+    }
   };
 
-  const completeTodo = (id: string): void => {
+  const completeTodo = (id: number): void => {
     const index = todos.findIndex((todo) => todo.id === id);
-    const newTodos: TodosType = [...todos];
+    const newTodos: TodoOptions[] = [...todos];
     newTodos[index].complete = !newTodos[index].complete;
 
     setTodos(newTodos);
@@ -87,8 +84,7 @@ export const TODOS: FunctionComponent = () => {
         {todos.map((todo) => (
           <Todo
             {...todo}
-            removeTodo={remvoveTODO}
-            editTodo={editTodo}
+            removeTodo={remvoveTodo}
             completeTodo={completeTodo}
           />
         ))}

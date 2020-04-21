@@ -1,25 +1,15 @@
 import React, { FunctionComponent, useState } from "react";
 
 export type TodoType = {
-  id: string;
+  id: number;
   text: string;
   complete: boolean;
-  edit: boolean;
-  removeTodo: (id: string) => void;
-  editTodo: (id: string) => void;
-  completeTodo: (id: string) => void;
+  removeTodo: (id: number) => void;
+  completeTodo: (id: number) => void;
 };
 
 export const Todo: FunctionComponent<TodoType> = (props) => {
-  const {
-    id,
-    text,
-    complete,
-    edit,
-    removeTodo,
-    editTodo,
-    completeTodo,
-  } = props;
+  const { id, text, complete, removeTodo, completeTodo } = props;
 
   return (
     <>
