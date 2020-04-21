@@ -11,19 +11,18 @@ router.get("/", async (req, res) => {
   return res.json(todos);
 });
 
-/*
 router.get("/:todoId", async (req, res) => {
   const result = await getTodoRepository().findOne(req.params.todoId);
   return res.json(result);
 });
-*/
+
 router.post("/", async (req, res) => {
   const todo = await getTodoRepository().create(req.body);
   const result = await getTodoRepository().save(todo);
   return res.send(result);
 });
 
-router.get("/:todoId", async (req, res) => {
+router.put("/:todoId", async (req, res) => {
   const todo = await getTodoRepository().findOne(req.params.id);
   //check undefined
   getTodoRepository().merge(todo!, req.body);
