@@ -4,15 +4,32 @@ import { Todo } from "../db/entity/Todo";
 
 const router: Router = Router();
 
-function getTodoRepository() {
-  return getConnection().getRepository<Todo[]>(Todo);
-}
-
-//const todoRepository = getConnection().getRepository(Todo);
+const getTodoRepository = () => getConnection().getRepository<Todo[]>(Todo);
 
 router.get("/", async (req, res) => {
-  let savedTodos = await getTodoRepository().find();
-  return res.json(savedTodos);
+  const todos = await getTodoRepository().find();
+  return res.json(todos);
+});
+
+/*
+router.get("/:todoId", async (req, res) => {
+  const result = await getTodoRepository().findOne(req.params.todoId);
+  return res.json(result);
+});
+*/
+router.post("/", async (req, res) => {
+  const todo = await getTodoRepository().create(req.body);
+  const result = await getTodoRepository().save(todo);
+  return res.send(result);
+});
+
+router.get("/:todoId", async (req, res) => {
+  const todo = await getTodoRepository().findOne(req.params.id);
+  //check undefined
+  getTodoRepository().merge(todo!, req.body);
+  //check undefined
+  const result = await getTodoRepository().save(todo!);
+  return res.send(result);
 });
 
 router.delete("/:todoId", async (req, res) => {
@@ -20,22 +37,4 @@ router.delete("/:todoId", async (req, res) => {
   return res.json(result);
 });
 
-/*
-router.get("/:messageId", (req, res) => {
-  return res.send(req.context.models.messages[req.params.messageId]);
-});
-*/
-/*
-router.post("/", (req, res) => {
-  const id = uuidv4();
-  const message = {
-    id,
-    text: req.body.text,
-    userId: req.context.me.id,
-  };
-  req.context.models.messages[id] = message;
-  return res.send(message);
-});
-
-*/
 export default router;
