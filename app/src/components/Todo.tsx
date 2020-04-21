@@ -20,6 +20,7 @@ export const Todo: FunctionComponent<TodoType> = (props) => {
     editTodo,
     completeTodo,
   } = props;
+
   return (
     <>
       <li key={id}>

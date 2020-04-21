@@ -1,6 +1,7 @@
-import React, { FunctionComponent, useState, useRef } from "react";
+import React, { FunctionComponent, useState, useEffect } from "react";
 import { Todo } from "./Todo";
 import { v4 as uuid } from "uuid";
+import useFetch from "use-http";
 
 type TodosType = {
   id: string;
@@ -12,7 +13,20 @@ type TodosType = {
 export const TODOS: FunctionComponent = () => {
   const [todos, setTodos] = useState<TodosType>([]);
   const [value, setValue] = useState<string>("");
+  //
+  const [request, response] = useFetch("http://localhost:5000/todos");
 
+  // componentDidMount
+  useEffect(() => {
+    initializeTodos();
+  }, []);
+
+  async function initializeTodos() {
+    const initialTodos = await request.get("/");
+
+    if (response.ok) setTodos(initialTodos);
+  }
+  //
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     addTODO(value);
 
@@ -30,6 +44,7 @@ export const TODOS: FunctionComponent = () => {
         edit: false,
       },
     ]);
+    console.log(todos);
   };
 
   const editTodo = (id: string): void => {
