@@ -23,7 +23,9 @@ router.post("/", async (req, res) => {
 });
 
 router.put("/:todoId", async (req, res) => {
-  const todo = await getTodoRepository().findOne(req.params.id);
+  console.log(req.params);
+  const todo = await getTodoRepository().findOne(req.params.todoId);
+  console.log(todo);
   //check undefined
   getTodoRepository().merge(todo!, req.body);
   //check undefined

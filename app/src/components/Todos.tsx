@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
 import { Todo } from "./Todo";
-import { v4 as uuid } from "uuid";
 import useFetch from "use-http";
 import "../todo.css";
 
@@ -61,12 +60,19 @@ export const Todos: FunctionComponent = () => {
     }
   };
 
-  const completeTodo = (id: number): void => {
+  const completeTodo = async (id: number) => {
+    console.log(id);
     const index = todos.findIndex((todo) => todo.id === id);
     const newTodos: TodoOptions[] = [...todos];
     newTodos[index].complete = !newTodos[index].complete;
 
-    setTodos(newTodos);
+    const updateTodo = await request.put(`/todos/${id}`, {
+      complete: newTodos[index].complete,
+    });
+
+    if (response.ok) {
+      setTodos(newTodos);
+    }
   };
 
   return (
