@@ -1,21 +1,19 @@
 import express from "express";
 import cors from "cors";
-import routes from "./routes";
-import bodyParser from "body-parser";
 import "dotenv/config";
 import "reflect-metadata";
 import { createConnection } from "typeorm";
+import { createExpressServer } from "routing-controllers";
+import { TodoController } from "./controllers/TodoController";
 
 createConnection()
   .then(async (connection) => {
     console.log("Successfully connected to a database");
 
-    const app: express.Application = express();
-
-    app.use(cors());
-    app.use(bodyParser.json());
-
-    app.use("/todos", routes.todo);
+    const app: express.Application = createExpressServer({
+      cors: true,
+      controllers: [TodoController],
+    });
 
     app.listen(process.env.PORT, () =>
       console.log(`Example app listening on port ${process.env.PORT}!`)
