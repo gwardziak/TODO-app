@@ -1,12 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-type TodoOptions = {
+export type TodoOptions = {
   text: string;
   complete: boolean;
 };
 
 @Entity()
-export class Todo {
+export class Todo implements TodoOptions {
   @PrimaryGeneratedColumn()
   id!: number;
 

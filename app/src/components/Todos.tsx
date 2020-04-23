@@ -19,10 +19,10 @@ export const Todos: FunctionComponent = () => {
     initializeTodos();
   }, []);
 
-  async function initializeTodos() {
+  const initializeTodos = async () => {
     const initialTodos = await request.get("/todos");
     if (response.ok) setTodos(initialTodos);
-  }
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     addTodo(value);
@@ -50,7 +50,7 @@ export const Todos: FunctionComponent = () => {
   };
 */
   const remvoveTodo = async (id: number) => {
-    const newTodo = await request.delete(`/todos/${id}`);
+    await request.delete(`/todos/${id}`);
 
     if (response.ok) {
       const index = todos.findIndex((todo) => todo.id === id);
@@ -61,12 +61,11 @@ export const Todos: FunctionComponent = () => {
   };
 
   const completeTodo = async (id: number) => {
-    console.log(id);
     const index = todos.findIndex((todo) => todo.id === id);
     const newTodos: TodoOptions[] = [...todos];
     newTodos[index].complete = !newTodos[index].complete;
 
-    const updateTodo = await request.put(`/todos/${id}`, {
+    await request.put(`/todos/${id}`, {
       complete: newTodos[index].complete,
     });
 
@@ -96,6 +95,7 @@ export const Todos: FunctionComponent = () => {
           .filter((todo) => todo.complete === false)
           .map((filteredTodo) => (
             <Todo
+              key={filteredTodo.id}
               {...filteredTodo}
               removeTodo={remvoveTodo}
               completeTodo={completeTodo}
@@ -109,6 +109,7 @@ export const Todos: FunctionComponent = () => {
           .filter((todo) => todo.complete === true)
           .map((filteredTodo) => (
             <Todo
+              key={filteredTodo.id}
               {...filteredTodo}
               removeTodo={remvoveTodo}
               completeTodo={completeTodo}

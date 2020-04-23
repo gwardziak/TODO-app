@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, Component } from "react";
+import React from "react";
 import { Todos } from "./components/Todos";
 import "./App.css";
 

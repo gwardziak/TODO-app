@@ -4,7 +4,7 @@ import routes from "./routes";
 import bodyParser from "body-parser";
 import "dotenv/config";
 import "reflect-metadata";
-import { createConnection, Connection } from "typeorm";
+import { createConnection } from "typeorm";
 
 createConnection()
   .then(async (connection) => {
