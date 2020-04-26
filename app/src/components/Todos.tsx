@@ -21,6 +21,7 @@ export const Todos: FunctionComponent = () => {
 
   const initializeTodos = async () => {
     const initialTodos = await request.get("/todos");
+
     if (response.ok) setTodos(initialTodos);
   };
 
@@ -49,10 +50,14 @@ export const Todos: FunctionComponent = () => {
     setTodos(newTodos);
   };
 */
+
   const remvoveTodo = async (id: number) => {
     await request.delete(`/todos/${id}`);
 
+    console.log(response);
+
     if (response.ok) {
+      console.log("nie udalo sie kurwa");
       const index = todos.findIndex((todo) => todo.id === id);
       setTodos(
         todos.slice(0, index).concat(todos.slice(index + 1, todos.length))

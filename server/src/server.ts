@@ -13,6 +13,13 @@ createConnection()
     const app: express.Application = createExpressServer({
       cors: true,
       controllers: [TodoController],
+      validation: {
+        forbidUnknownValues: true,
+        whitelist: true,
+        // validationError: {
+        //   target: false
+        // }
+      },
     });
 
     app.listen(process.env.PORT, () =>
