@@ -7,14 +7,7 @@ import {
   Put,
   Delete,
 } from "routing-controllers";
-
-import {
-  IsInt,
-  IsString,
-  IsBoolean,
-  validate,
-  IsOptional,
-} from "class-validator";
+import { IsInt, IsString, IsBoolean, IsOptional } from "class-validator";
 import { getRepository, createQueryBuilder } from "typeorm";
 import { Todo, TodoOptions } from "../db/entity/Todo";
 
@@ -31,31 +24,59 @@ class TodoValidation implements TodoOptions {
   complete!: boolean;
 }
 
+class BoDyValidation implements TodoOptions {
+  @IsInt()
+  id!: number;
+
+  @IsOptional({ groups: ["put"] })
+  @IsString({ groups: ["put"] })
+  text!: string;
+
+  @IsOptional({ groups: ["put"] })
+  @IsBoolean({ groups: ["put"] })
+  complete!: boolean;
+}
+
 @JsonController("/todos")
 export class TodoController {
+  //ok
   @Get()
   getAll() {
     return getRepository(Todo).find();
   }
-
+  //ok
   @Get("/:id")
   getOne(@Param("id") id: TodoValidation) {
     return getRepository(Todo).findOne(id);
   }
-
+  //ok?
   @Post()
   post(
-    @Body({ validate: { groups: ["post"], skipMissingProperties: true } })
-    { text, complete }: TodoValidation
+    @Body({
+      validate: {
+        groups: ["post"],
+        skipMissingProperties: true,
+        forbidUnknownValues: true,
+        whitelist: true,
+      },
+    })
+    todo: TodoValidation
   ) {
-    return getRepository(Todo).save({ text, complete });
+    return getRepository(Todo).save(todo);
   }
 
   @Put("/:id")
   put(
     @Param("id") id: TodoValidation,
-    @Body({ validate: { groups: ["put"], skipMissingProperties: true } })
-    todo: TodoValidation
+    @Body({
+      validate: {
+        groups: ["put"],
+        skipMissingProperties: true,
+        forbidUnknownValues: true,
+        whitelist: true,
+      },
+    })
+    todo: TodoOptions
   ) {
     if (Object.keys(todo).length === 0) throw new Error("Nothing to update");
 
