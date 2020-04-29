@@ -24,19 +24,6 @@ class TodoValidation implements TodoOptions {
   complete!: boolean;
 }
 
-class BoDyValidation implements TodoOptions {
-  @IsInt()
-  id!: number;
-
-  @IsOptional({ groups: ["put"] })
-  @IsString({ groups: ["put"] })
-  text!: string;
-
-  @IsOptional({ groups: ["put"] })
-  @IsBoolean({ groups: ["put"] })
-  complete!: boolean;
-}
-
 @JsonController("/todos")
 export class TodoController {
   //ok
@@ -49,7 +36,7 @@ export class TodoController {
   getOne(@Param("id") id: TodoValidation) {
     return getRepository(Todo).findOne(id);
   }
-  //ok?
+  //todo put/post
   @Post()
   post(
     @Body({
@@ -62,6 +49,7 @@ export class TodoController {
     })
     todo: TodoValidation
   ) {
+    console.log("passed");
     return getRepository(Todo).save(todo);
   }
 
