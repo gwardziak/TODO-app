@@ -26,17 +26,16 @@ class TodoValidation implements TodoOptions {
 
 @JsonController("/todos")
 export class TodoController {
-  //ok
   @Get()
   getAll() {
     return getRepository(Todo).find();
   }
-  //ok
+
   @Get("/:id")
   getOne(@Param("id") id: TodoValidation) {
     return getRepository(Todo).findOne(id);
   }
-  //todo put/post
+
   @Post()
   post(
     @Body({
@@ -49,7 +48,7 @@ export class TodoController {
     })
     todo: TodoValidation
   ) {
-    console.log("passed");
+    if (Object.keys(todo).length === 0) throw new Error("Nothing to add");
     return getRepository(Todo).save(todo);
   }
 
@@ -76,7 +75,6 @@ export class TodoController {
       .execute();
   }
 
-  //TODO handle typeorm response
   @Delete("/:id")
   async remove(@Param("id") id: TodoValidation) {
     return await getRepository(Todo).delete(id);
