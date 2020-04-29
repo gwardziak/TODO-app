@@ -66,11 +66,10 @@ export const Todos: FunctionComponent = () => {
     const index = todos.findIndex((todo) => todo.id === id);
     const newTodos: TodoOptions[] = [...todos];
     newTodos[index].complete = !newTodos[index].complete;
-
     await request.put(`/todos/${id}`, {
       complete: newTodos[index].complete,
     });
-
+    console.log(response);
     if (response.ok) {
       setTodos(newTodos);
     }

@@ -71,7 +71,7 @@ export class TodoController {
       .createQueryBuilder()
       .update(Todo)
       .set(todo)
-      .where("id = :id", id)
+      .where("id = :id", { id })
       .execute();
   }
 
