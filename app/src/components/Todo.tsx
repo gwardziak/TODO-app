@@ -10,20 +10,19 @@ export type TodoType = {
 };
 
 export const Todo: FunctionComponent<TodoType> = (props) => {
-  const [isEdit, setIsEdit] = useState<boolean>(false);
   const { id, text, complete, removeTodo, completeTodo, editTodo } = props;
-  const [value, setValue] = useState<string>(text || "");
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [value, setValue] = useState<string>(text);
 
   return (
     <>
-      {complete && (
+      {!complete && (
         <li>
-          <input type="checkbox" checked onClick={() => completeTodo(id)} />
+          <input readOnly type="checkbox" onClick={() => completeTodo(id)} />
 
           {!isEdit ? (
             <>
-              <label>{text}</label>
-              <input type="text" />
+              <label>{value}</label>
               <button className="edit" onClick={() => setIsEdit(!isEdit)}>
                 Edit
               </button>
@@ -36,29 +35,31 @@ export const Todo: FunctionComponent<TodoType> = (props) => {
                 type="text"
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
+              />
+              <button
+                className="edit"
                 onClick={() => {
                   setIsEdit(!isEdit);
                   editTodo(id, value);
                 }}
-              />
-              <button className="edit">Edit</button>
+              >
+                Edit
+              </button>
             </>
           )}
-
           <button className="delete" onClick={() => removeTodo(id)}>
             Delete
           </button>
         </li>
       )}
 
-      {!complete && (
+      {complete && (
         <li>
-          <input type="checkbox" onClick={() => completeTodo(id)} />
+          <input readOnly type="checkbox" onClick={() => completeTodo(id)} />
 
           {!isEdit ? (
             <>
               <label>{value}</label>
-              <input type="text" />
               <button className="edit" onClick={() => setIsEdit(!isEdit)}>
                 Edit
               </button>
