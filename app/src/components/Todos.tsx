@@ -3,7 +3,7 @@ import { Todo } from "./Todo";
 import useFetch from "use-http";
 import "../todo.css";
 
-type TodoOptions = {
+export type TodoOptions = {
   id: number;
   text: string;
   complete: boolean;
@@ -41,11 +41,10 @@ export const Todos: FunctionComponent = () => {
     if (response.ok) setTodos([...todos, newTodo]);
   };
 
-  const editTodo = async (id: number) => {
+  const editTodo = async (id: number, value: string) => {
     const index = todos.findIndex((todo) => todo.id === id);
     const newTodos: TodoOptions[] = [...todos];
-    console.log(newTodos[index].text);
-    newTodos[index].text = newTodos[index].text;
+    newTodos[index].text = value;
 
     await request.put(`/todos/${id}`, {
       text: newTodos[index].text,
@@ -71,7 +70,7 @@ export const Todos: FunctionComponent = () => {
     await request.put(`/todos/${id}`, {
       complete: newTodos[index].complete,
     });
-    console.log(response);
+
     if (response.ok) {
       setTodos(newTodos);
     }
@@ -125,22 +124,3 @@ export const Todos: FunctionComponent = () => {
     </div>
   );
 };
-
-/*
-
-
-
-
-
-
-
-
-        <li className="editMode">
-          <input type="checkbox" />
-          <label>Go Shopping</label>
-          <input type="text" value="Go Shopping" />
-          <button className="edit">Edit</button>
-          <button className="delete">Delete</button>
-        </li>
-
-*/
