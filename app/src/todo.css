@@ -25,6 +25,10 @@ input,
 button {
   outline: none;
 }
+
+h1 {
+  text-align: center;
+}
 input,
 button {
   background: none;
@@ -36,7 +40,7 @@ button {
   font-family: Lato, sans-serif;
   cursor: pointer;
 }
-button,
+button:hover,
 input:hover {
   color: #333;
 }
@@ -76,8 +80,9 @@ input#new-task {
   float: left;
   width: 318px;
 }
-p > button,
-input:hover {
+
+p > button:hover,
+p > input:hover {
   color: #0fc57c;
 }
 
@@ -116,6 +121,14 @@ ul li input[type="text"] {
   display: none;
 }
 
+input[type="text"].editMode {
+  display: block;
+}
+label.editMode {
+  display: none;
+}
+
+/*
 ul li.editMode input[type="text"] {
   display: block;
 }
@@ -123,3 +136,4 @@ ul li.editMode input[type="text"] {
 ul li.editMode label {
   display: none;
 }
+*/

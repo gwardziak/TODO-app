@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useState } from "react";
 
 export type TodoType = {
   id: number;
@@ -6,19 +6,37 @@ export type TodoType = {
   complete: boolean;
   removeTodo: (id: number) => void;
   completeTodo: (id: number) => void;
+  editTodo: (id: number) => void;
 };
 
 export const Todo: FunctionComponent<TodoType> = (props) => {
-  const { id, text, complete, removeTodo, completeTodo } = props;
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const { id, text, complete, removeTodo, completeTodo, editTodo } = props;
 
   return (
     <>
       {complete && (
         <li>
           <input type="checkbox" checked onClick={() => completeTodo(id)} />
-          <label>{text}</label>
-          <input type="text" />
-          <button className="edit">Edit</button>
+
+          {!isEdit ? (
+            <>
+              <label>{text}</label>
+              <input type="text" />
+              <button className="edit" onClick={() => setIsEdit(!isEdit)}>
+                Edit
+              </button>
+            </>
+          ) : (
+            <>
+              <label className="editMode">{text}</label>
+              <input className="editMode" type="text" value={text} />
+              <button className="edit" onClick={() => setIsEdit(!isEdit)}>
+                Edit
+              </button>
+            </>
+          )}
+
           <button className="delete" onClick={() => removeTodo(id)}>
             Delete
           </button>
@@ -28,9 +46,24 @@ export const Todo: FunctionComponent<TodoType> = (props) => {
       {!complete && (
         <li>
           <input type="checkbox" onClick={() => completeTodo(id)} />
-          <label>{text}</label>
-          <input type="text" />
-          <button className="edit">Edit</button>
+
+          {!isEdit ? (
+            <>
+              <label>{text}</label>
+              <input type="text" />
+              <button className="edit" onClick={() => setIsEdit(!isEdit)}>
+                Edit
+              </button>
+            </>
+          ) : (
+            <>
+              <label className="editMode">{text}</label>
+              <input className="editMode" type="text" value={text} />
+              <button className="edit" onClick={() => setIsEdit(!isEdit)}>
+                Edit
+              </button>
+            </>
+          )}
           <button className="delete" onClick={() => removeTodo(id)}>
             Delete
           </button>
@@ -41,7 +74,11 @@ export const Todo: FunctionComponent<TodoType> = (props) => {
 };
 
 /*
-
+   {!isEditing && (
+            <button className="edit" onClick={() => editTodo(id)}>
+              Edit
+            </button>
+          )}
 */
 //
 /*

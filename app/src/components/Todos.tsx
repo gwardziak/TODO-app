@@ -41,15 +41,17 @@ export const Todos: FunctionComponent = () => {
     if (response.ok) setTodos([...todos, newTodo]);
   };
 
-  /*
-  const editTodo = (id: number): void => {
+  const editTodo = async (id: number) => {
     const index = todos.findIndex((todo) => todo.id === id);
-    const newTodos: TodosType = [...todos];
-    newTodos[index].text = "new";
+    const newTodos: TodoOptions[] = [...todos];
+    console.log(newTodos[index].text);
+    newTodos[index].text = newTodos[index].text;
 
-    setTodos(newTodos);
+    await request.put(`/todos/${id}`, {
+      text: newTodos[index].text,
+    });
+    if (response.ok) setTodos(newTodos);
   };
-*/
 
   const remvoveTodo = async (id: number) => {
     await request.delete(`/todos/${id}`);
@@ -76,7 +78,7 @@ export const Todos: FunctionComponent = () => {
   };
 
   return (
-    <>
+    <div className="container">
       <h1>Todo List</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor="new-task">Add Item</label>
@@ -86,7 +88,9 @@ export const Todos: FunctionComponent = () => {
           value={value}
           id="new-task"
         />
-        <input type="submit" value="Add" required />
+        <p>
+          <input type="submit" value="Add" required />
+        </p>
       </form>
 
       <h3>Todo</h3>
@@ -99,6 +103,7 @@ export const Todos: FunctionComponent = () => {
               {...filteredTodo}
               removeTodo={remvoveTodo}
               completeTodo={completeTodo}
+              editTodo={editTodo}
             />
           ))}
       </ul>
@@ -113,10 +118,11 @@ export const Todos: FunctionComponent = () => {
               {...filteredTodo}
               removeTodo={remvoveTodo}
               completeTodo={completeTodo}
+              editTodo={editTodo}
             />
           ))}
       </ul>
-    </>
+    </div>
   );
 };
 
