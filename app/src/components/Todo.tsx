@@ -4,13 +4,22 @@ export type TodoType = {
   id: number;
   text: string;
   complete: boolean;
+  startsAt: Date;
   removeTodo: (id: number) => void;
   completeTodo: (id: number) => void;
   editTodo: (id: number, value: string) => void;
 };
 
 export const Todo: FunctionComponent<TodoType> = (props) => {
-  const { id, text, complete, removeTodo, completeTodo, editTodo } = props;
+  const {
+    id,
+    text,
+    complete,
+    startsAt,
+    removeTodo,
+    completeTodo,
+    editTodo,
+  } = props;
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [value, setValue] = useState<string>(text);
 
@@ -50,6 +59,7 @@ export const Todo: FunctionComponent<TodoType> = (props) => {
           <button className="delete" onClick={() => removeTodo(id)}>
             Delete
           </button>
+          <p>Starting date: {new Date(startsAt).toString()}</p>
         </li>
       )}
 
@@ -87,6 +97,7 @@ export const Todo: FunctionComponent<TodoType> = (props) => {
           <button className="delete" onClick={() => removeTodo(id)}>
             Delete
           </button>
+          <p>Startin date: {new Date(startsAt).toString()}</p>
         </li>
       )}
     </>

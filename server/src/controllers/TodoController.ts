@@ -7,9 +7,20 @@ import {
   Put,
   Delete,
 } from "routing-controllers";
-import { IsInt, IsString, IsBoolean, IsOptional } from "class-validator";
+import {
+  IsInt,
+  IsString,
+  IsBoolean,
+  IsOptional,
+  IsDateString,
+} from "class-validator";
 import { getRepository, createQueryBuilder } from "typeorm";
 import { Todo, TodoOptions } from "../db/entity/Todo";
+
+//const convertLocalDateToUTC = (localDate: string): Date => {
+//  console.log(localDate);
+//  return new Date(new Date(localDate).toISOString());
+//};
 
 class TodoValidation implements TodoOptions {
   @IsInt()
@@ -22,6 +33,9 @@ class TodoValidation implements TodoOptions {
   @IsOptional({ groups: ["put"] })
   @IsBoolean({ groups: ["post", "put"] })
   complete!: boolean;
+
+  @IsDateString({ groups: ["post"] })
+  startsAt!: Date;
 }
 
 @JsonController("/todos")
@@ -49,6 +63,9 @@ export class TodoController {
     todo: TodoValidation
   ) {
     if (Object.keys(todo).length === 0) throw new Error("Nothing to add");
+    console.log(todo.startsAt);
+    console.log(typeof todo.startsAt);
+    //todo.startsAt = convertLocalDateToUTC(todo.startsAt.toString());
     return getRepository(Todo).save(todo);
   }
 

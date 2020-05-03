@@ -7,6 +7,7 @@ export type TodoOptions = {
   id: number;
   text: string;
   complete: boolean;
+  startsAt: Date;
 };
 
 export const Todos: FunctionComponent = () => {
@@ -36,6 +37,7 @@ export const Todos: FunctionComponent = () => {
     const newTodo = await request.post("/todos", {
       text,
       complete: false,
+      startsAt: new Date(),
     });
 
     if (response.ok) setTodos([...todos, newTodo]);
