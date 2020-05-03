@@ -34,13 +34,18 @@ export const Todos: FunctionComponent = () => {
   };
 
   const addTodo = async (text: string) => {
+    // const todoDate: Date = new Date();
+
     const newTodo = await request.post("/todos", {
       text,
       complete: false,
-      startsAt: new Date(),
+      startsAt: new Date(new Date().toISOString()),
     });
 
-    if (response.ok) setTodos([...todos, newTodo]);
+    if (response.ok) {
+      //  newTodo.startsAt = todoDate;
+      setTodos([...todos, newTodo]);
+    }
   };
 
   const editTodo = async (id: number, value: string) => {

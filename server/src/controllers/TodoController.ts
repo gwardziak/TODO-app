@@ -17,11 +17,6 @@ import {
 import { getRepository, createQueryBuilder } from "typeorm";
 import { Todo, TodoOptions } from "../db/entity/Todo";
 
-//const convertLocalDateToUTC = (localDate: string): Date => {
-//  console.log(localDate);
-//  return new Date(new Date(localDate).toISOString());
-//};
-
 class TodoValidation implements TodoOptions {
   @IsInt()
   id!: number;
@@ -63,9 +58,7 @@ export class TodoController {
     todo: TodoValidation
   ) {
     if (Object.keys(todo).length === 0) throw new Error("Nothing to add");
-    console.log(todo.startsAt);
-    console.log(typeof todo.startsAt);
-    //todo.startsAt = convertLocalDateToUTC(todo.startsAt.toString());
+
     return getRepository(Todo).save(todo);
   }
 
