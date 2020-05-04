@@ -2,6 +2,7 @@ import React, { FunctionComponent, useState, useEffect } from "react";
 import { Todo } from "./Todo";
 import useFetch from "use-http";
 import "../todo.css";
+import { TodoDatePicker } from "./DatePicker";
 
 export type TodoOptions = {
   id: number;
@@ -85,7 +86,9 @@ export const Todos: FunctionComponent = () => {
 
   return (
     <div className="container">
+      <TodoDatePicker />
       <h1>Todo List</h1>
+
       <form onSubmit={handleSubmit}>
         <label htmlFor="new-task">Add Item</label>
         <input
