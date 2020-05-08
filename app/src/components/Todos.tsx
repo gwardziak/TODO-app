@@ -1,8 +1,10 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
 import { Todo } from "./Todo";
 import useFetch from "use-http";
-import "../todo.css";
+//import "../todo.css";
 import { TodoDatePicker } from "./DatePicker";
+import styled, { StyledFunction } from "styled-components";
+import { Button, ButtonType } from "./../ui/Button";
 
 export type TodoOptions = {
   id: number;
@@ -85,25 +87,25 @@ export const Todos: FunctionComponent = () => {
   };
 
   return (
-    <div className="container">
-      <TodoDatePicker />
+    <TodoContainer>
       <h1>Todo List</h1>
+      <p>
+        <form onSubmit={handleSubmit}>
+          <TodoLabel>Add Item</TodoLabel>
+          <TodoInput
+            type="text"
+            onChange={(e) => setValue(e.target.value)}
+            value={value}
+            id="new-task"
+          />
 
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="new-task">Add Item</label>
-        <input
-          type="text"
-          onChange={(e) => setValue(e.target.value)}
-          value={value}
-          id="new-task"
-        />
-        <p>
-          <input type="submit" value="Add" required />
-        </p>
-      </form>
-
-      <h3>Todo</h3>
-      <ul id="incomplete-tasks">
+          <Button color={ButtonType.Add} type="submit">
+            Add
+          </Button>
+        </form>
+      </p>
+      <TodoLabell>Todo</TodoLabell>
+      <TodoUl>
         {todos
           .filter((todo) => todo.complete === false)
           .map((filteredTodo) => (
@@ -115,10 +117,10 @@ export const Todos: FunctionComponent = () => {
               editTodo={editTodo}
             />
           ))}
-      </ul>
+      </TodoUl>
 
-      <h3>Completed</h3>
-      <ul id="completed-tasks">
+      <TodoLabell>Completed</TodoLabell>
+      <TodoUl>
         {todos
           .filter((todo) => todo.complete === true)
           .map((filteredTodo) => (
@@ -130,7 +132,57 @@ export const Todos: FunctionComponent = () => {
               editTodo={editTodo}
             />
           ))}
-      </ul>
-    </div>
+      </TodoUl>
+    </TodoContainer>
   );
 };
+
+const TodoUl = styled("ul")`
+  margin: 0;
+  padding: 0;
+  display: block;
+  overflow: hidden;
+`;
+
+const TodoInput = styled("input")`
+  float: left;
+  width: 318px;
+  font-size: 18px;
+  line-height: 18px;
+  height: 18px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 6px;
+  font-family: Lato, sans-serif;
+  color: #888;
+`;
+
+const TodoLabel = styled("label")`
+  display: block;
+  margin: 0 0 20px;
+  color: #333;
+  font-weight: 700;
+  font-size: 15px;
+  border-bottom: 2px solid #333;
+  padding: 30px 0 10px;
+  text-transform: uppercase;
+`;
+
+const TodoLabell = styled("h3")`
+  color: #333;
+  font-weight: 700;
+  font-size: 15px;
+  border-bottom: 2px solid #333;
+  padding: 30px 0 10px;
+  margin: 0;
+  text-transform: uppercase;
+  clear: both;
+  list-style: none;
+`;
+
+const TodoContainer = styled("div")`
+  display: block;
+  width: 400px;
+  margin: 100px auto 0;
+`;
