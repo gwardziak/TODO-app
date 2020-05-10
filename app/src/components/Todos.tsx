@@ -3,7 +3,7 @@ import { Todo } from "./Todo";
 import useFetch from "use-http";
 //import "../todo.css";
 import { TodoDatePicker } from "./DatePicker";
-import styled, { StyledFunction } from "styled-components";
+import styled, { css } from "styled-components";
 import { Button, ButtonType } from "./../ui/Button";
 
 export type TodoOptions = {
@@ -91,7 +91,7 @@ export const Todos: FunctionComponent = () => {
       <h1>Todo List</h1>
       <p>
         <form onSubmit={handleSubmit}>
-          <TodoLabel>Add Item</TodoLabel>
+          <TodoHeaderLabel margin={"0 0 20px"}>Add Item</TodoHeaderLabel>
           <TodoInput
             type="text"
             onChange={(e) => setValue(e.target.value)}
@@ -104,8 +104,8 @@ export const Todos: FunctionComponent = () => {
           </Button>
         </form>
       </p>
-      <TodoLabell>Todo</TodoLabell>
-      <TodoUl>
+      <TodoHeaderLabel margin={"0"}>Todo</TodoHeaderLabel>
+      <TodoListCointainer>
         {todos
           .filter((todo) => todo.complete === false)
           .map((filteredTodo) => (
@@ -117,10 +117,10 @@ export const Todos: FunctionComponent = () => {
               editTodo={editTodo}
             />
           ))}
-      </TodoUl>
+      </TodoListCointainer>
 
-      <TodoLabell>Completed</TodoLabell>
-      <TodoUl>
+      <TodoHeaderLabel margin={"0"}>Completed</TodoHeaderLabel>
+      <TodoListCointainer>
         {todos
           .filter((todo) => todo.complete === true)
           .map((filteredTodo) => (
@@ -132,12 +132,18 @@ export const Todos: FunctionComponent = () => {
               editTodo={editTodo}
             />
           ))}
-      </TodoUl>
+      </TodoListCointainer>
     </TodoContainer>
   );
 };
 
-const TodoUl = styled("ul")`
+const TodoContainer = styled("div")`
+  display: block;
+  width: 400px;
+  margin: 100px auto 0;
+`;
+
+const TodoListCointainer = styled("ul")`
   margin: 0;
   padding: 0;
   display: block;
@@ -159,31 +165,17 @@ const TodoInput = styled("input")`
   outline: none;
 `;
 
-const TodoLabel = styled("label")`
-  display: block;
-  margin: 0 0 20px;
+type TodoHeaderLabelStyle = {
+  margin: string;
+};
+
+const TodoHeaderLabel = styled("label")<TodoHeaderLabelStyle>`
   color: #333;
   font-weight: 700;
   font-size: 15px;
   border-bottom: 2px solid #333;
   padding: 30px 0 10px;
   text-transform: uppercase;
-`;
-
-const TodoLabell = styled("h3")`
-  color: #333;
-  font-weight: 700;
-  font-size: 15px;
-  border-bottom: 2px solid #333;
-  padding: 30px 0 10px;
-  margin: 0;
-  text-transform: uppercase;
-  clear: both;
-  list-style: none;
-`;
-
-const TodoContainer = styled("div")`
   display: block;
-  width: 400px;
-  margin: 100px auto 0;
+  margin: ${(props) => props.margin};
 `;
