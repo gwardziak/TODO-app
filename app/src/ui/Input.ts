@@ -16,7 +16,6 @@ export const Input = styled("input")<InputType>`
   font-family: Lato, sans-serif;
   color: #888;
   margin: 0;
-  margin-left: 10px;
 
   display: ${(props) => props.display};
   width: ${(props) => props.width}px;
