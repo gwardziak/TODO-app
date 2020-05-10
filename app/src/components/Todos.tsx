@@ -156,6 +156,7 @@ const TodoInput = styled("input")`
   border-radius: 6px;
   font-family: Lato, sans-serif;
   color: #888;
+  outline: none;
 `;
 
 const TodoLabel = styled("label")`
