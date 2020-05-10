@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
 import styled, { css } from "styled-components";
 import { Button, ButtonType } from "./../ui/Button";
+import { Input } from "./../ui/Input";
 
 export type TodoType = {
   id: number;
@@ -43,7 +44,9 @@ export const Todo: FunctionComponent<TodoType> = (props) => {
           </>
         ) : (
           <>
-            <TodoToggleEditMode
+            <Input
+              width="226"
+              display="block"
               type="text"
               value={value}
               onChange={(e) => setValue(e.target.value)}
@@ -100,19 +103,4 @@ const TodoLabel = styled("label")<TodoLabel>`
       text-decoration: line-through;
       color: #888;
     `}
-`;
-
-const TodoToggleEditMode = styled("input")`
-  border: 1px solid #ddd;
-  padding: 10px;
-  width: 226px;
-  font-size: 18px;
-  height: 18px;
-  line-height: 18px;
-  display: block;
-  background: #fff;
-  border-radius: 6px;
-  font-family: Lato, sans-serif;
-  color: #888;
-  margin: 0;
 `;

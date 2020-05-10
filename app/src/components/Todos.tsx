@@ -3,8 +3,9 @@ import { Todo } from "./Todo";
 import useFetch from "use-http";
 //import "../todo.css";
 import { TodoDatePicker } from "./DatePicker";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { Button, ButtonType } from "./../ui/Button";
+import { Input } from "./../ui/Input";
 
 export type TodoOptions = {
   id: number;
@@ -91,8 +92,11 @@ export const Todos: FunctionComponent = () => {
       <h1>Todo List</h1>
       <p>
         <form onSubmit={handleSubmit}>
-          <TodoHeaderLabel margin={"0 0 20px"}>Add Item</TodoHeaderLabel>
-          <TodoInput
+          <TodoHeaderLabel margin="0 0 20px">Add Item</TodoHeaderLabel>
+          <TodoDatePicker />
+          <Input
+            width="318"
+            display="inline"
             type="text"
             onChange={(e) => setValue(e.target.value)}
             value={value}
@@ -104,7 +108,7 @@ export const Todos: FunctionComponent = () => {
           </Button>
         </form>
       </p>
-      <TodoHeaderLabel margin={"0"}>Todo</TodoHeaderLabel>
+      <TodoHeaderLabel margin="0">Todo</TodoHeaderLabel>
       <TodoListCointainer>
         {todos
           .filter((todo) => todo.complete === false)
@@ -119,7 +123,7 @@ export const Todos: FunctionComponent = () => {
           ))}
       </TodoListCointainer>
 
-      <TodoHeaderLabel margin={"0"}>Completed</TodoHeaderLabel>
+      <TodoHeaderLabel margin="0">Completed</TodoHeaderLabel>
       <TodoListCointainer>
         {todos
           .filter((todo) => todo.complete === true)
@@ -148,21 +152,6 @@ const TodoListCointainer = styled("ul")`
   padding: 0;
   display: block;
   overflow: hidden;
-`;
-
-const TodoInput = styled("input")`
-  float: left;
-  width: 318px;
-  font-size: 18px;
-  line-height: 18px;
-  height: 18px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  background: #fff;
-  border-radius: 6px;
-  font-family: Lato, sans-serif;
-  color: #888;
-  outline: none;
 `;
 
 type TodoHeaderLabelStyle = {
