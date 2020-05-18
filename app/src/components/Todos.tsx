@@ -143,7 +143,7 @@ export const Todos: FunctionComponent = () => {
 
 const TodoContainer = styled("div")`
   display: block;
-  width: 400px;
+  width: 670px;
   margin: 100px auto 0;
 `;
 
