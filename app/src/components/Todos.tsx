@@ -90,24 +90,22 @@ export const Todos: FunctionComponent = () => {
   return (
     <TodoContainer>
       <h1>Todo List</h1>
-      <p>
-        <form onSubmit={handleSubmit}>
-          <TodoHeaderLabel margin="0 0 20px">Add Item</TodoHeaderLabel>
-          <TodoDatePicker />
-          <Input
-            width="318"
-            display="inline"
-            type="text"
-            onChange={(e) => setValue(e.target.value)}
-            value={value}
-            id="new-task"
-          />
+      <form onSubmit={handleSubmit}>
+        <TodoHeaderLabel margin="0 0 20px">Add Item</TodoHeaderLabel>
+        <TodoDatePicker />
+        <Input
+          width="318"
+          display="inline"
+          type="text"
+          onChange={(e) => setValue(e.target.value)}
+          value={value}
+          id="new-task"
+        />
 
-          <Button color={ButtonType.Add} type="submit">
-            Add
-          </Button>
-        </form>
-      </p>
+        <Button color={ButtonType.Add} type="submit">
+          Add
+        </Button>
+      </form>
       <TodoHeaderLabel margin="0">Todo</TodoHeaderLabel>
       <TodoListCointainer>
         {todos

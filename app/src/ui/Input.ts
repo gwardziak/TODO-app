@@ -6,6 +6,7 @@ type InputType = {
 };
 
 export const Input = styled("input")<InputType>`
+  outline: none;
   border: 1px solid #ddd;
   padding: 10px;
   font-size: 18px;
