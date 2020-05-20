@@ -56,11 +56,7 @@ export const TodoDatePicker: FunctionComponent = () => {
 
   return (
     <>
-      {date.error !== "" && (
-        <>
-          <ErrorContainer>Invalid Date</ErrorContainer>
-        </>
-      )}
+      {date.error !== "" && <ErrorContainer>Invalid Date</ErrorContainer>}
       <CalendarContainer>
         <DateInput
           type="text"
