@@ -3,26 +3,21 @@ import styled, { css } from "styled-components";
 import { Button, ButtonType } from "./../ui/Button";
 import { Input } from "./../ui/Input";
 
-export type TodoType = {
+export type Todo = {
   id: number;
   text: string;
   complete: boolean;
   startsAt: Date;
-  removeTodo: (id: number) => void;
-  completeTodo: (id: number) => void;
-  editTodo: (id: number, value: string) => void;
 };
 
-export const Todo: FunctionComponent<TodoType> = (props) => {
-  const {
-    id,
-    text,
-    complete,
-    startsAt,
-    removeTodo,
-    completeTodo,
-    editTodo,
-  } = props;
+export type TodoProps = Todo & {
+  onEdit: (id: number, update: Partial<Omit<Todo, "id">>) => void;
+  onComplete: (id: number) => void;
+  onDelete: (id: number) => void;
+};
+
+export const Todo: FunctionComponent<TodoProps> = (props) => {
+  const { id, text, complete, startsAt, onEdit, onComplete, onDelete } = props;
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [value, setValue] = useState<string>(text);
 
@@ -33,7 +28,7 @@ export const Todo: FunctionComponent<TodoType> = (props) => {
           checked={complete}
           readOnly
           type="checkbox"
-          onClick={() => completeTodo(id)}
+          onClick={() => onComplete(id)}
         />
         {!isEdit ? (
           <>
@@ -55,22 +50,21 @@ export const Todo: FunctionComponent<TodoType> = (props) => {
               color={ButtonType.Edit}
               onClick={() => {
                 setIsEdit(!isEdit);
-                editTodo(id, value);
+                onEdit(id, { text: value });
               }}
             >
               Edit
             </Button>
           </>
         )}
-        <Button color={ButtonType.Delete} onClick={() => removeTodo(id)}>
+        <Button color={ButtonType.Delete} onClick={() => onDelete(id)}>
           Delete
         </Button>
-        <p>Starting date: {new Date(startsAt).toString()}</p>
       </TodoContainer>
     </>
   );
 };
-
+// <p>Starting date: {new Date(startsAt).toString()}</p>
 const TodoContainer = styled("li")`
   overflow: hidden;
   padding: 20px 0;

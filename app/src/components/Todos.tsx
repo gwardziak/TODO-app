@@ -1,22 +1,15 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
 import { Todo } from "./Todo";
+import { TodoList } from "./TodoList";
 import useFetch from "use-http";
-//import "../todo.css";
-import { TodoDatePicker } from "./DatePicker";
 import styled from "styled-components";
-import { Button, ButtonType } from "./../ui/Button";
-import { Input } from "./../ui/Input";
 
-export type TodoOptions = {
-  id: number;
-  text: string;
-  complete: boolean;
-  startsAt: Date;
+type TodosState = {
+  todos: Todo[];
 };
 
 export const Todos: FunctionComponent = () => {
-  const [todos, setTodos] = useState<TodoOptions[]>([]);
-  const [value, setValue] = useState<string>("");
+  const [state, setState] = useState<TodosState>({ todos: [] });
   const [request, response] = useFetch("http://localhost:5000");
 
   // componentDidMount
@@ -27,114 +20,63 @@ export const Todos: FunctionComponent = () => {
   const initializeTodos = async () => {
     const initialTodos = await request.get("/todos");
 
-    if (response.ok) setTodos(initialTodos);
+    if (response.ok) setState({ todos: initialTodos });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
-    addTodo(value);
-
-    e.preventDefault();
-    setValue("");
-  };
-
-  const addTodo = async (text: string) => {
-    // const todoDate: Date = new Date();
-
-    const newTodo = await request.post("/todos", {
-      text,
-      complete: false,
-      startsAt: new Date(new Date().toISOString()),
-    });
-
-    if (response.ok) {
-      //  newTodo.startsAt = todoDate;
-      setTodos([...todos, newTodo]);
-    }
-  };
-
-  const editTodo = async (id: number, value: string) => {
-    const index = todos.findIndex((todo) => todo.id === id);
-    const newTodos: TodoOptions[] = [...todos];
-    newTodos[index].text = value;
+  const editTodo = async (id: number, update: Partial<Omit<Todo, "id">>) => {
+    const index = state.todos.findIndex((todo) => todo.id === id);
+    const newTodos = [...state.todos];
+    newTodos[index] = { ...newTodos[index], ...update };
 
     await request.put(`/todos/${id}`, {
-      text: newTodos[index].text,
+      ...update,
     });
-    if (response.ok) setTodos(newTodos);
-  };
-
-  const remvoveTodo = async (id: number) => {
-    await request.delete(`/todos/${id}`);
-
-    if (response.ok) {
-      const index = todos.findIndex((todo) => todo.id === id);
-      setTodos(
-        todos.slice(0, index).concat(todos.slice(index + 1, todos.length))
-      );
-    }
+    if (response.ok) setState({ todos: newTodos });
   };
 
   const completeTodo = async (id: number) => {
-    const index = todos.findIndex((todo) => todo.id === id);
-    const newTodos: TodoOptions[] = [...todos];
+    const index = state.todos.findIndex((todo) => todo.id === id);
+    const newTodos: Todo[] = [...state.todos];
     newTodos[index].complete = !newTodos[index].complete;
     await request.put(`/todos/${id}`, {
       complete: newTodos[index].complete,
     });
 
     if (response.ok) {
-      setTodos(newTodos);
+      setState({ todos: newTodos });
+    }
+  };
+
+  const remvoveTodo = async (id: number) => {
+    await request.delete(`/todos/${id}`);
+
+    if (response.ok) {
+      const index = state.todos.findIndex((todo) => todo.id === id);
+      setState({
+        todos: state.todos
+          .slice(0, index)
+          .concat(state.todos.slice(index + 1, state.todos.length)),
+      });
     }
   };
 
   return (
     <TodoContainer>
       <h1>Todo List</h1>
-      <form onSubmit={handleSubmit}>
-        <TodoHeaderLabel margin="0 0 20px">Add Item</TodoHeaderLabel>
-        <TodoDatePicker />
-        <Input
-          width="318"
-          display="inline"
-          type="text"
-          onChange={(e) => setValue(e.target.value)}
-          value={value}
-          id="new-task"
-        />
-
-        <Button color={ButtonType.Add} type="submit">
-          Add
-        </Button>
-      </form>
-      <TodoHeaderLabel margin="0">Todo</TodoHeaderLabel>
-      <TodoListCointainer>
-        {todos
-          .filter((todo) => todo.complete === false)
-          .map((filteredTodo) => (
-            <Todo
-              key={filteredTodo.id}
-              {...filteredTodo}
-              removeTodo={remvoveTodo}
-              completeTodo={completeTodo}
-              editTodo={editTodo}
-            />
-          ))}
-      </TodoListCointainer>
-
-      <TodoHeaderLabel margin="0">Completed</TodoHeaderLabel>
-      <TodoListCointainer>
-        {todos
-          .filter((todo) => todo.complete === true)
-          .map((filteredTodo) => (
-            <Todo
-              key={filteredTodo.id}
-              {...filteredTodo}
-              removeTodo={remvoveTodo}
-              completeTodo={completeTodo}
-              editTodo={editTodo}
-            />
-          ))}
-      </TodoListCointainer>
+      <TodoList
+        listName="Todo"
+        onComplete={completeTodo}
+        onDelete={remvoveTodo}
+        onEdit={editTodo}
+        todos={state.todos.filter((todo) => !todo.complete)}
+      />
+      <TodoList
+        listName="Completed"
+        onComplete={completeTodo}
+        onDelete={remvoveTodo}
+        onEdit={editTodo}
+        todos={state.todos.filter((todo) => todo.complete)}
+      />
     </TodoContainer>
   );
 };
@@ -143,26 +85,4 @@ const TodoContainer = styled("div")`
   display: block;
   width: 670px;
   margin: 100px auto 0;
-`;
-
-const TodoListCointainer = styled("ul")`
-  margin: 0;
-  padding: 0;
-  display: block;
-  overflow: hidden;
-`;
-
-type TodoHeaderLabelStyle = {
-  margin: string;
-};
-
-const TodoHeaderLabel = styled("label")<TodoHeaderLabelStyle>`
-  color: #333;
-  font-weight: 700;
-  font-size: 15px;
-  border-bottom: 2px solid #333;
-  padding: 30px 0 10px;
-  text-transform: uppercase;
-  display: block;
-  margin: ${(props) => props.margin};
 `;
