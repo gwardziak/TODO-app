@@ -12,12 +12,11 @@ export type Todo = {
 
 export type TodoProps = Todo & {
   onEdit: (id: number, update: Partial<Omit<Todo, "id">>) => void;
-  onComplete: (id: number) => void;
   onDelete: (id: number) => void;
 };
 
 export const Todo: FunctionComponent<TodoProps> = (props) => {
-  const { id, text, complete, startsAt, onEdit, onComplete, onDelete } = props;
+  const { id, text, complete, startsAt, onEdit, onDelete } = props;
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [value, setValue] = useState<string>(text);
 
@@ -28,7 +27,7 @@ export const Todo: FunctionComponent<TodoProps> = (props) => {
           checked={complete}
           readOnly
           type="checkbox"
-          onClick={() => onComplete(id)}
+          onClick={() => onEdit(id, { complete: !complete })}
         />
         {!isEdit ? (
           <>

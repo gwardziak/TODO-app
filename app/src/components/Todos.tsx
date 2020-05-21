@@ -34,19 +34,6 @@ export const Todos: FunctionComponent = () => {
     if (response.ok) setState({ todos: newTodos });
   };
 
-  const completeTodo = async (id: number) => {
-    const index = state.todos.findIndex((todo) => todo.id === id);
-    const newTodos: Todo[] = [...state.todos];
-    newTodos[index].complete = !newTodos[index].complete;
-    await request.put(`/todos/${id}`, {
-      complete: newTodos[index].complete,
-    });
-
-    if (response.ok) {
-      setState({ todos: newTodos });
-    }
-  };
-
   const remvoveTodo = async (id: number) => {
     await request.delete(`/todos/${id}`);
 
@@ -65,14 +52,12 @@ export const Todos: FunctionComponent = () => {
       <h1>Todo List</h1>
       <TodoList
         listName="Todo"
-        onComplete={completeTodo}
         onDelete={remvoveTodo}
         onEdit={editTodo}
         todos={state.todos.filter((todo) => !todo.complete)}
       />
       <TodoList
         listName="Completed"
-        onComplete={completeTodo}
         onDelete={remvoveTodo}
         onEdit={editTodo}
         todos={state.todos.filter((todo) => todo.complete)}
