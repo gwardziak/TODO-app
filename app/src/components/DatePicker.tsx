@@ -6,14 +6,14 @@ import { FaCalendarAlt } from "react-icons/fa";
 import { GrPowerReset } from "react-icons/gr";
 import Inputmask from "inputmask";
 
-type dateOptions = {
+type DateOptions = {
   value: Date | string | null;
   isDate: boolean;
   error: string;
 };
 
 export const TodoDatePicker: FunctionComponent = () => {
-  const [date, setDate] = useState<dateOptions>({
+  const [date, setDate] = useState<DateOptions>({
     value: new Date(),
     isDate: true,
     error: "",
@@ -29,7 +29,7 @@ export const TodoDatePicker: FunctionComponent = () => {
     //clearIncomplete: true,
   }).mask("dateMask");
 
-  const serializeDate = (input: string): dateOptions => {
+  const serializeDate = (input: string): DateOptions => {
     const transformInput: number[] = input
       .replace(/,/g, "")
       .replace(/[\s:]/g, "/")

@@ -3,6 +3,7 @@ import { Todo } from "./Todo";
 import { TodoList } from "./TodoList";
 import useFetch from "use-http";
 import styled from "styled-components";
+import { AddTodo } from "./AddTodo";
 
 type TodosState = {
   todos: Todo[];
@@ -21,6 +22,19 @@ export const Todos: FunctionComponent = () => {
     const initialTodos = await request.get("/todos");
 
     if (response.ok) setState({ todos: initialTodos });
+  };
+
+  const addTodo = async (text: string) => {
+    const newTodo: Todo = await request.post("/todos", {
+      text,
+      complete: false,
+      startsAt: new Date(new Date().toISOString()),
+    });
+
+    if (response.ok) {
+      //  newTodo.startsAt = todoDate;
+      setState({ todos: [...state.todos, newTodo] });
+    }
   };
 
   const editTodo = async (id: number, update: Partial<Omit<Todo, "id">>) => {
@@ -50,6 +64,7 @@ export const Todos: FunctionComponent = () => {
   return (
     <TodoContainer>
       <h1>Todo List</h1>
+      <AddTodo onAdd={addTodo}></AddTodo>
       <TodoList
         listName="Todo"
         onDelete={remvoveTodo}
