@@ -1,5 +1,4 @@
 import React, { FunctionComponent, useState } from "react";
-import { Todo } from "./Todo";
 import { TodoDatePicker } from "./DatePicker";
 import { Input } from "./../ui/Input";
 import { Button, ButtonType } from "./../ui/Button";
@@ -7,35 +6,57 @@ import styled from "styled-components";
 
 type AddTodoState = {
   title: string;
-  startAt: Date;
+  startsAt: {
+    value: Date | string | null;
+    isDate: boolean;
+    error: string;
+  };
 };
 
 type AddTodoProps = {
-  onAdd: (title: string) => void;
+  onAdd: (title: string, startsAt: Date) => void;
 };
 
 export const AddTodo: FunctionComponent<AddTodoProps> = (props) => {
   const { onAdd } = props;
-  const [value, setValue] = useState<string>("");
+  const [todo, setTodo] = useState<AddTodoState>({
+    title: "",
+    startsAt: {
+      value: new Date(),
+      isDate: true,
+      error: "",
+    },
+  });
+
+  const setTodoZjednoPropertka = (propertka: any) =>
+    setTodo({ startsAt: propertka, title: todo.title });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
-    onAdd(value);
+    //@ts-ignore
+    onAdd(todo.title, todo.startsAt.value);
 
     e.preventDefault();
-    setValue("");
+    setTodo({
+      title: "",
+      startsAt: {
+        value: new Date(),
+        isDate: true,
+        error: "",
+      },
+    });
   };
 
   return (
     <>
       <form onSubmit={handleSubmit}>
         <TodoHeaderLabel margin="0 0 20px">Add Item</TodoHeaderLabel>
-        <TodoDatePicker />
+        <TodoDatePicker date={todo.startsAt} setTodo={setTodoZjednoPropertka} />
         <Input
           width="318"
           display="inline"
           type="text"
-          onChange={(e) => setValue(e.target.value)}
-          value={value}
+          onChange={(e) => setTodo({ ...todo, title: e.target.value })}
+          value={todo.title}
           id="new-task"
         />
 

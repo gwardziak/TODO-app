@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
@@ -6,18 +6,21 @@ import { FaCalendarAlt } from "react-icons/fa";
 import { GrPowerReset } from "react-icons/gr";
 import Inputmask from "inputmask";
 
-type DateOptions = {
-  value: Date | string | null;
-  isDate: boolean;
-  error: string;
+type DatePickerProps = {
+  date: {
+    value: Date | string | null;
+    isDate: boolean;
+    error: string;
+  };
+
+  setTodo: (propertka: any) => void;
 };
 
-export const TodoDatePicker: FunctionComponent = () => {
-  const [date, setDate] = useState<DateOptions>({
-    value: new Date(),
-    isDate: true,
-    error: "",
-  });
+export const TodoDatePicker = (props: DatePickerProps) => {
+  const {
+    date: { value, isDate, error },
+    setTodo,
+  } = props;
 
   Inputmask({
     alias: "datetime",
@@ -29,7 +32,7 @@ export const TodoDatePicker: FunctionComponent = () => {
     //clearIncomplete: true,
   }).mask("dateMask");
 
-  const serializeDate = (input: string): DateOptions => {
+  const serializeDate = (input: string): Omit<DatePickerProps, "setTodo"> => {
     const transformInput: number[] = input
       .replace(/,/g, "")
       .replace(/[\s:]/g, "/")
@@ -46,39 +49,40 @@ export const TodoDatePicker: FunctionComponent = () => {
 
     if (date.toString() === "Invalid Date")
       return {
+        //@ts-ignore
         value: input,
         isDate: false,
         error: "Invalid Date",
       };
-
+    //@ts-ignore
     return { value: date, isDate: true, error: "" };
   };
 
   return (
     <>
-      {date.error !== "" && <ErrorContainer>Invalid Date</ErrorContainer>}
+      {error !== "" && <ErrorContainer>Invalid Date</ErrorContainer>}
       <CalendarContainer>
         <DateInput
           type="text"
           id="dateMask"
-          value={date.value ? date.value.toLocaleString() : ""}
+          value={value ? value.toLocaleString() : ""}
           onChange={(e) =>
-            setDate({
+            setTodo({
               isDate: false,
               error: "",
               value: e.target.value,
             })
           }
           onBlur={(e) => {
-            setDate(serializeDate(e.target.value));
+            setTodo(serializeDate(e.target.value));
           }}
         />
         <StyledCalendar>
           <DatePicker
             //@ts-ignore
-            selected={date.isDate ? date.value : null}
+            selected={isDate ? value : null}
             onChange={(date) =>
-              setDate({
+              setTodo({
                 isDate: true,
                 error: "",
                 value: date,
@@ -97,7 +101,7 @@ export const TodoDatePicker: FunctionComponent = () => {
         <Icon>
           <GrPowerReset
             onClick={() =>
-              setDate({
+              setTodo({
                 isDate: true,
                 error: "",
                 value: new Date(),
@@ -150,15 +154,12 @@ const ErrorContainer = styled("div")`
 
 const StyledCalendar = styled("div")`
   display: inline-block;
-
   .react-datepicker {
     margin-left: -30px;
   }
-
   .react-datepicker__tab-loop {
     display: inline-block;
   }
-
   .react-datepicker__navigation {
     right: 90px;
   }

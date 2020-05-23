@@ -24,11 +24,11 @@ export const Todos: FunctionComponent = () => {
     if (response.ok) setState({ todos: initialTodos });
   };
 
-  const addTodo = async (text: string) => {
+  const addTodo = async (text: string, date: Date) => {
     const newTodo: Todo = await request.post("/todos", {
       text,
       complete: false,
-      startsAt: new Date(new Date().toISOString()),
+      startsAt: date.toISOString(),
     });
 
     if (response.ok) {
