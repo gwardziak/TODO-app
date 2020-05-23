@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Todo } from "./Todo";
 import { TodoList } from "./TodoList";
 import useFetch from "use-http";
@@ -9,7 +9,7 @@ type TodosState = {
   todos: Todo[];
 };
 
-export const Todos: FunctionComponent = () => {
+export const Todos = () => {
   const [state, setState] = useState<TodosState>({ todos: [] });
   const [request, response] = useFetch("http://localhost:5000");
 
@@ -32,7 +32,6 @@ export const Todos: FunctionComponent = () => {
     });
 
     if (response.ok) {
-      //  newTodo.startsAt = todoDate;
       setState({ todos: [...state.todos, newTodo] });
     }
   };

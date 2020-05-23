@@ -17,7 +17,7 @@ type AddTodoProps = {
   onAdd: (title: string, startsAt: Date) => void;
 };
 
-export const AddTodo: FunctionComponent<AddTodoProps> = (props) => {
+export const AddTodo = (props: AddTodoProps) => {
   const { onAdd } = props;
   const [todo, setTodo] = useState<AddTodoState>({
     title: "",

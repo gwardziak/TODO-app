@@ -15,7 +15,7 @@ export type TodoProps = Todo & {
   onDelete: (id: number) => void;
 };
 
-export const Todo: FunctionComponent<TodoProps> = (props) => {
+export const Todo = (props: TodoProps) => {
   const { id, text, complete, startsAt, onEdit, onDelete } = props;
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [value, setValue] = useState<string>(text);

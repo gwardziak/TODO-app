@@ -10,7 +10,7 @@ export type TodoListProps = {
   onDelete: (id: number) => void;
 };
 
-export const TodoList: FunctionComponent<TodoListProps> = (props) => {
+export const TodoList = (props: TodoListProps) => {
   const { listName, todos, onEdit, onDelete } = props;
   return (
     <>
