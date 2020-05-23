@@ -7,7 +7,7 @@ import styled from "styled-components";
 type AddTodoState = {
   title: string;
   startsAt: {
-    value: Date | string | null;
+    value: Date | string;
     isDate: boolean;
     error: string;
   };
@@ -28,7 +28,7 @@ export const AddTodo = (props: AddTodoProps) => {
     },
   });
 
-  const setTodoZjednoPropertka = (propertka: any) =>
+  const setDate = (propertka: any) =>
     setTodo({ startsAt: propertka, title: todo.title });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
@@ -49,17 +49,15 @@ export const AddTodo = (props: AddTodoProps) => {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <TodoHeaderLabel margin="0 0 20px">Add Item</TodoHeaderLabel>
-        <TodoDatePicker date={todo.startsAt} setTodo={setTodoZjednoPropertka} />
+        <TodoHeaderLabel>Add Item</TodoHeaderLabel>
+        <TodoDatePicker date={todo.startsAt} setTodo={setDate} />
         <Input
           width="318"
           display="inline"
           type="text"
           onChange={(e) => setTodo({ ...todo, title: e.target.value })}
           value={todo.title}
-          id="new-task"
         />
-
         <Button color={ButtonType.Add} type="submit">
           Add
         </Button>
@@ -68,11 +66,7 @@ export const AddTodo = (props: AddTodoProps) => {
   );
 };
 
-type TodoHeaderLabelStyle = {
-  margin: string;
-};
-
-const TodoHeaderLabel = styled("label")<TodoHeaderLabelStyle>`
+const TodoHeaderLabel = styled("label")`
   color: #333;
   font-weight: 700;
   font-size: 15px;
@@ -80,5 +74,5 @@ const TodoHeaderLabel = styled("label")<TodoHeaderLabelStyle>`
   padding: 30px 0 10px;
   text-transform: uppercase;
   display: block;
-  margin: ${(props) => props.margin};
+  margin: 0 0 20px;
 `;

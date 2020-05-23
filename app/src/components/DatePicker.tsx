@@ -8,7 +8,7 @@ import Inputmask from "inputmask";
 
 type DatePickerProps = {
   date: {
-    value: Date | string | null;
+    value: Date | string;
     isDate: boolean;
     error: string;
   };
@@ -123,6 +123,7 @@ const CalendarContainer = styled("div")`
   border-radius: 6px;
   padding: 10.2px;
   font-family: Lato, sans-serif;
+  margin-right: 20px;
 `;
 
 const DateInput = styled("input")`
