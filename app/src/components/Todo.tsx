@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import { Button, ButtonType } from "./../ui/Button";
 import { Input } from "./../ui/Input";

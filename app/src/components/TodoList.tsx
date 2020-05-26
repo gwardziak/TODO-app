@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React from "react";
 import { Todo } from "./Todo";
 import styled from "styled-components";
 

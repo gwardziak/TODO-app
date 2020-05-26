@@ -5,22 +5,23 @@ import styled from "styled-components";
 import { FaCalendarAlt } from "react-icons/fa";
 import { GrPowerReset } from "react-icons/gr";
 import Inputmask from "inputmask";
+import { DateType } from "./AddTodo";
 
 type DatePickerProps = {
-  date: {
-    value: Date | string;
-    isDate: boolean;
-    error: string;
-  };
+  date: DateType;
 
-  setTodo: (propertka: any) => void;
+  setDate: (date: DateType) => void;
 };
 
 export const TodoDatePicker = (props: DatePickerProps) => {
-  const {
-    date: { value, isDate, error },
-    setTodo,
-  } = props;
+  const formatDate = (date: Date) => {
+    return `${date.getDate()}/${
+      date.getMonth() + 1
+    }/${date.getFullYear()}, ${date.getHours()}:${date.getMinutes()}`;
+  };
+
+  const { date, setDate } = props;
+  const [input, setInput] = useState<string>(formatDate(date.startsAt));
 
   Inputmask({
     alias: "datetime",
@@ -29,10 +30,9 @@ export const TodoDatePicker = (props: DatePickerProps) => {
     numericInput: false,
     clearMaskOnLostFocus: false,
     positionCaretOnClick: "none",
-    //clearIncomplete: true,
   }).mask("dateMask");
 
-  const serializeDate = (input: string): Omit<DatePickerProps, "setTodo"> => {
+  const serializeDate = (input: string) => {
     const transformInput: number[] = input
       .replace(/,/g, "")
       .replace(/[\s:]/g, "/")
@@ -48,46 +48,36 @@ export const TodoDatePicker = (props: DatePickerProps) => {
     );
 
     if (date.toString() === "Invalid Date")
-      return {
-        //@ts-ignore
-        value: input,
-        isDate: false,
-        error: "Invalid Date",
-      };
-    //@ts-ignore
-    return { value: date, isDate: true, error: "" };
+      return { err: new Error("Invalid Date") };
+
+    return { startsAt: date, err: null };
   };
 
   return (
     <>
-      {error !== "" && <ErrorContainer>Invalid Date</ErrorContainer>}
+      {date.err && <ErrorContainer>Invalid Date</ErrorContainer>}
       <CalendarContainer>
         <DateInput
           type="text"
           id="dateMask"
-          value={value ? value.toLocaleString() : ""}
-          onChange={(e) =>
-            setTodo({
-              isDate: false,
-              error: "",
-              value: e.target.value,
-            })
-          }
+          value={input.toLocaleString()}
+          onChange={(e) => {
+            setInput(e.target.value);
+          }}
           onBlur={(e) => {
-            setTodo(serializeDate(e.target.value));
+            setDate({ ...date, ...serializeDate(input) });
           }}
         />
         <StyledCalendar>
           <DatePicker
-            //@ts-ignore
-            selected={isDate ? value : null}
-            onChange={(date) =>
-              setTodo({
-                isDate: true,
-                error: "",
-                value: date,
-              })
-            }
+            selected={date.startsAt}
+            onChange={(pickedDate) => {
+              setDate({
+                err: null,
+                startsAt: pickedDate ? pickedDate : date.startsAt,
+              });
+              setInput(formatDate(pickedDate ? pickedDate : date.startsAt));
+            }}
             dateFormat="dd/MM/yyyy, HH:mm"
             showTimeSelect
             timeFormat="HH:mm"
@@ -100,13 +90,14 @@ export const TodoDatePicker = (props: DatePickerProps) => {
         </StyledCalendar>
         <Icon>
           <GrPowerReset
-            onClick={() =>
-              setTodo({
-                isDate: true,
-                error: "",
-                value: new Date(),
-              })
-            }
+            onClick={() => {
+              const now = new Date();
+              setDate({
+                err: null,
+                startsAt: now,
+              });
+              setInput(formatDate(now));
+            }}
           />
         </Icon>
       </CalendarContainer>
@@ -123,7 +114,7 @@ const CalendarContainer = styled("div")`
   border-radius: 6px;
   padding: 10.2px;
   font-family: Lato, sans-serif;
-  margin-right: 20px;
+  margin-right: 15px;
 `;
 
 const DateInput = styled("input")`
