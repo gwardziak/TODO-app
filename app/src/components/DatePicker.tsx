@@ -14,10 +14,14 @@ type DatePickerProps = {
 };
 
 export const TodoDatePicker = (props: DatePickerProps) => {
+  const leadingZero = (num: number) => `0${num}`.slice(-2);
+
   const formatDate = (date: Date) => {
     return `${date.getDate()}/${
       date.getMonth() + 1
-    }/${date.getFullYear()}, ${date.getHours()}:${date.getMinutes()}`;
+    }/${date.getFullYear()}, ${date.getHours()}:${leadingZero(
+      date.getMinutes()
+    )}`;
   };
 
   const { date, setDate } = props;

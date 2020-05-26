@@ -23,11 +23,8 @@ export const Todos = () => {
 
     if (response.ok) setState({ todos: initialTodos });
   };
-  type AddStatus = {
-    err: Error | null;
-  };
 
-  const addTodo = async (todo: AddTodoState): Promise<AddStatus> => {
+  const addTodo = async (todo: AddTodoState) => {
     if (todo.date.err) return { err: todo.date.err };
     const newTodo: Todo = await request.post("/todos", {
       text: todo.title,

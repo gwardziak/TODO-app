@@ -12,6 +12,10 @@ export type AddTodoState = {
   };
 };
 
+export type ErrorStatus = {
+  err: Error | null;
+};
+
 type AddTodoProps = {
   onAdd: (todo: AddTodoState) => Promise<AddStatus>;
 };
