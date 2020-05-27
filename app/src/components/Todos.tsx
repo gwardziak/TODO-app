@@ -3,7 +3,7 @@ import { Todo } from "./Todo";
 import { TodoList } from "./TodoList";
 import useFetch from "use-http";
 import styled from "styled-components";
-import { AddTodo, AddTodoState } from "./AddTodo";
+import { AddTodo, AddTodoState, ErrorStatus } from "./AddTodo";
 
 type TodosState = {
   todos: Todo[];
@@ -24,8 +24,9 @@ export const Todos = () => {
     if (response.ok) setState({ todos: initialTodos });
   };
 
-  const addTodo = async (todo: AddTodoState) => {
+  const addTodo = async (todo: AddTodoState): Promise<ErrorStatus> => {
     if (todo.date.err) return { err: todo.date.err };
+
     const newTodo: Todo = await request.post("/todos", {
       text: todo.title,
       complete: false,
@@ -37,7 +38,7 @@ export const Todos = () => {
       return { err: null };
     }
 
-    return { err: new Error("unknown") };
+    return { err: new Error("Response failed") };
   };
 
   const editTodo = async (id: number, update: Partial<Omit<Todo, "id">>) => {

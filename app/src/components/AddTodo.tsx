@@ -6,25 +6,18 @@ import styled from "styled-components";
 
 export type AddTodoState = {
   title: string;
-  date: {
-    err: Error | null;
-    startsAt: Date;
-  };
-};
-
-export type ErrorStatus = {
-  err: Error | null;
+  date: DateType;
 };
 
 type AddTodoProps = {
-  onAdd: (todo: AddTodoState) => Promise<AddStatus>;
+  onAdd: (todo: AddTodoState) => Promise<ErrorStatus>;
 };
 
 export type DateType = {
-  err: Error | null;
   startsAt: Date;
-};
-type AddStatus = {
+} & ErrorStatus;
+
+export type ErrorStatus = {
   err: Error | null;
 };
 
@@ -44,7 +37,6 @@ export const AddTodo = (props: AddTodoProps) => {
     e.preventDefault();
 
     const status = await onAdd(todo);
-    console.log(status);
 
     if (status.err) return;
 
