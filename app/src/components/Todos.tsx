@@ -11,7 +11,7 @@ type TodosState = {
 
 export const Todos = () => {
   const [state, setState] = useState<TodosState>({ todos: [] });
-  const [request, response] = useFetch("http://localhost:5000");
+  const [request, response, error] = useFetch("http://localhost:5000");
 
   // componentDidMount
   useEffect(() => {
@@ -70,6 +70,7 @@ export const Todos = () => {
 
   return (
     <TodoContainer>
+      {error && "Request Error!"}
       <h1>Todo List</h1>
       <AddTodo onAdd={addTodo}></AddTodo>
       <TodoList
