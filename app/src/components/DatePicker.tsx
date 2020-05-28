@@ -6,6 +6,7 @@ import { FaCalendarAlt } from "react-icons/fa";
 import { GrPowerReset } from "react-icons/gr";
 import Inputmask from "inputmask";
 import { DateType } from "./AddTodo";
+import { FormatDate } from "../utils/FormatDate";
 
 type DatePickerProps = {
   date: DateType;
@@ -14,18 +15,10 @@ type DatePickerProps = {
 };
 
 export const TodoDatePicker = (props: DatePickerProps) => {
-  const leadingZero = (num: number) => `0${num}`.slice(-2);
-
-  const formatDate = (date: Date) => {
-    return `${date.getDate()}/${
-      date.getMonth() + 1
-    }/${date.getFullYear()}, ${date.getHours()}:${leadingZero(
-      date.getMinutes()
-    )}`;
-  };
-
   const { date, setDate } = props;
-  const [input, setInput] = useState<string>(formatDate(date.startsAt));
+  const [input, setInput] = useState<string>(
+    FormatDate.datePattern(date.startsAt).toString()
+  );
 
   Inputmask({
     alias: "datetime",
@@ -80,7 +73,9 @@ export const TodoDatePicker = (props: DatePickerProps) => {
                 err: null,
                 startsAt: pickedDate ? pickedDate : date.startsAt,
               });
-              setInput(formatDate(pickedDate ? pickedDate : date.startsAt));
+              setInput(
+                FormatDate.datePattern(pickedDate ? pickedDate : date.startsAt)
+              );
             }}
             dateFormat="dd/MM/yyyy, HH:mm"
             showTimeSelect
@@ -100,7 +95,7 @@ export const TodoDatePicker = (props: DatePickerProps) => {
                 err: null,
                 startsAt: now,
               });
-              setInput(formatDate(now));
+              setInput(FormatDate.datePattern(now));
             }}
           />
         </Icon>
