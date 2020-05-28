@@ -20,6 +20,18 @@ export const Todo = (props: TodoProps) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [value, setValue] = useState<string>(text);
 
+  const leadingZero = (num: number) => `0${num}`.slice(-2);
+
+  const formatDate = (date: Date) => {
+    date = new Date(date);
+
+    return `${date.getDate()}/${
+      date.getMonth() + 1
+    }/${date.getFullYear()}, ${date.getHours()}:${leadingZero(
+      date.getMinutes()
+    )}`;
+  };
+
   return (
     <>
       <TodoContainer>
@@ -31,6 +43,7 @@ export const Todo = (props: TodoProps) => {
         />
         {!isEdit ? (
           <>
+            <TodoLabel complete={complete}>{formatDate(startsAt)}</TodoLabel>
             <TodoLabel complete={complete}>{value}</TodoLabel>
             <Button color={ButtonType.Edit} onClick={() => setIsEdit(!isEdit)}>
               Edit
@@ -38,6 +51,7 @@ export const Todo = (props: TodoProps) => {
           </>
         ) : (
           <>
+            <TodoLabel complete={complete}>{formatDate(startsAt)}</TodoLabel>
             <Input
               width="226"
               display="block"

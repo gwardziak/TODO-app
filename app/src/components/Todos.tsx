@@ -21,7 +21,10 @@ export const Todos = () => {
   const initializeTodos = async () => {
     const initialTodos = await request.get("/todos");
 
-    if (response.ok) setState({ todos: initialTodos });
+    if (response.ok)
+      setState({
+        todos: initialTodos.sort((a: Todo, b: Todo) => a.startsAt > b.startsAt),
+      });
   };
 
   const addTodo = async (todo: AddTodoState): Promise<ErrorStatus> => {
