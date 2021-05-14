@@ -1,9 +1,8 @@
-import express from "express";
-import cors from "cors";
 import "dotenv/config";
+import express from "express";
 import "reflect-metadata";
-import { createConnection } from "typeorm";
 import { createExpressServer } from "routing-controllers";
+import { createConnection } from "typeorm";
 import { TodoController } from "./controllers/TodoController";
 
 createConnection()
@@ -22,8 +21,8 @@ createConnection()
       },
     });
 
-    app.listen(process.env.PORT, () =>
-      console.log(`Example app listening on port ${process.env.PORT}!`)
+    app.listen(process.env.PORT ?? 5000, () =>
+      console.log(`Example app listening on port ${process.env.PORT || 5000}!`)
     );
   })
   .catch((error) => console.log("Database connection err: " + error));
